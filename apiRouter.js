@@ -18,6 +18,7 @@ module.exports = (app) => {
 
     const userRoutes = express.Router();
     const UserController = require('./routes/user');
+    userRoutes.get('/', UserController.getAllUsers);
 
     apiRoutes.use('/users', userRoutes);
 

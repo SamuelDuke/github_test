@@ -10,7 +10,7 @@ exports.getAllUsers = (req, res, next) => {
             const updatedUsers = users.map((user) => {
                 return user.infoToSend();
             });
-            return res.status(200).json({status: 'Success', data: updatedUsers})
+            return res.status(200).json(updatedUsers)
         })
         .then(null, err => { return next(err) });
 };
@@ -20,7 +20,7 @@ exports.getUser = (req, res, next) => {
     User.findOne({_id: req.params.id}).exec()
         .then(user => {
             if (user === null) { return next(); }
-            return res.status(200).json({status: 'Success', data: user});
+            return res.status(200).json(user);
         })
         .then(null, err => { return next(err); });
 };
@@ -31,27 +31,27 @@ exports.deleteUser = (req, res, next) => {
     User.find({_id: req.params.id}).remove().exec()
         .then((user) => {
             user.userId = req.params.id;
-            return res.status(200).json({status: 'Success', data: user});
+            return res.status(200).json(user);
         })
         .then(null, err => { return next(err); });
 };
 
 exports.createUser = (req, res, next) => {
+    const {firstName, lastName, password, email } = req.body;
     User({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        password: req.body.password,
-        email: req.body.email,
-        memberships: []
+        firstName,
+        lastName,
+        password,
+        email,
     }).save()
         .then(user => {
-            res.status(201).json({status: 'Success', data: user})
+            res.status(201).json(user)
         })
         .then(null, err => { return next(err); });
 };
 
 exports.notAllowed405 = (req, res, next) => {
-    res.status(405).json({status: ERROR, message: "You can not use a POST method with users/:id"});
+    res.status(405).json({ message: "You can not use a POST method with users/:id"});
 };
 
 exports.updateUser = (req, res, next) => {
