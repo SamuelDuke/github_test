@@ -18,9 +18,22 @@ module.exports = (app) => {
 
     const userRoutes = express.Router();
     const UserController = require('./routes/user');
+    const FriendshipController = require('./routes/friendship');
     userRoutes.get('/', UserController.getAllUsers);
+    userRoutes.get('/me', UserController.getMe);
+    userRoutes.get('/:id', UserController.getUser);
+    userRoutes.delete('/:id', UserController.deleteUser);
+    userRoutes.put('/group', UserController.joinGroup);
+    userRoutes.post('/friends', FriendshipController.create);
 
     apiRoutes.use('/users', userRoutes);
+
+    const groupRoutes = express.Router();
+    const GroupController = require('./routes/group');
+    groupRoutes.post('/', GroupController.create);
+    groupRoutes.get('/:groupId', GroupController.getAllMembers);
+
+    apiRoutes.use('/groups', groupRoutes);
 
     const adminRoutes = express.Router();
     app.use('/admin', adminRoutes);

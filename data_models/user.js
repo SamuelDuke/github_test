@@ -7,7 +7,8 @@ const UserSchema = new Schema({
     firstName: {type: String, required: [true, 'You must submit a first name.']},
     lastName: {type: String, required: [true, 'You must submit a last name.']},
     email: {type: String, required: [true, 'You must submit an email.'], unique: true},
-    password: {type: String, required: [true, 'You must submit a last name.']}
+    password: {type: String, required: [true, 'You must submit a last name.']},
+    groups: [{type: Schema.Types.ObjectId, ref: 'Group'}]
 });
 
 //UserSchema.virtual('id').get( function() {return this._id.toHexString();});
@@ -29,8 +30,8 @@ UserSchema.methods.infoToSend = function() {
     return {
         firstName: this.firstName,
         lastName: this.lastName,
-        email: this.email,
-        id: this._id
+        id: this._id,
+        groups: this.groups
     }
 };
 
