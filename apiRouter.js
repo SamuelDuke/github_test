@@ -24,9 +24,17 @@ module.exports = (app) => {
     userRoutes.get('/:id', UserController.getUser);
     userRoutes.delete('/:id', UserController.deleteUser);
     userRoutes.put('/group', UserController.joinGroup);
-    userRoutes.post('/friends', FriendshipController.create);
+
 
     apiRoutes.use('/users', userRoutes);
+
+    const friendRoutes = express.Router();
+    friendRoutes.post('/', FriendshipController.create);
+    friendRoutes.get('/', FriendshipController.getFriends);
+    friendRoutes.get('/requested', FriendshipController.getFriendRequests);
+    friendRoutes.put('/requested', FriendshipController.acceptFriendRequest);
+
+    apiRoutes.use('/friends', friendRoutes);
 
     const groupRoutes = express.Router();
     const GroupController = require('./routes/group');
@@ -37,8 +45,6 @@ module.exports = (app) => {
 
     const adminRoutes = express.Router();
     app.use('/admin', adminRoutes);
-
-
 
     app.use('/api', requireAuth, apiRoutes);
 };

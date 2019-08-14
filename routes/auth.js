@@ -24,7 +24,7 @@ exports.createUser = (req, res, next) => {
             firstName,
             lastName,
             password,
-            email
+            email: email.toLowerCase()
         }).save()
             .then(user => {
                 res.status(201).json(user.infoToSend())
@@ -39,7 +39,8 @@ exports.createUser = (req, res, next) => {
 };
 
 exports.getJWTLocal = (req, res, next) => {
-    User.findOne({email: req.body.email}).exec()
+    const email = req.body.email.toLowerCase();
+    User.findOne({email: email}).exec()
         .then(user => {
             if (user === null) {
                 return res.status(400).json({error: 'That email is not registered.'});
